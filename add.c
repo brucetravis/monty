@@ -7,13 +7,15 @@
  */
 void add_function(stack_t **stack, unsigned int line_number)
 {
+    int sum;
+
     if (*stack == NULL || (*stack)->next == NULL)
     {
         fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
 
-    int sum = (*stack)->n + (*stack)->next->n;
-    pop_function(stack, line_number); // Remove top element
-    (*stack)->n = sum; // Store result in the second top element
+    sum = (*stack)->n + (*stack)->next->n;
+    pop_function(stack, line_number);
+    (*stack)->n = sum;
 }
