@@ -1,43 +1,50 @@
 #include "monty.h"
 #include <stdio.h>
 
-/**
- * main - Entry point of the Monty interpreter.
- * @argc: The number of arguments.
- * @argv: The array of arguments.
- * Return: Always 0.
- */
+ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
+bus_t bus = {NULL, NULL, NULL, 0};
+
+/**
+ * main - monty code interpreter
+ * @argc: number of arguments
+ * @argv: monty file location
+ * Return: 0 on success
+ */
 int main(int argc, char *argv[])
 {
-    FILE *bytecode_file;
-    char line[1024];
-    unsigned int line_number = 1;
+    char *content = NULL;
+    FILE *file;
+    size_t size = 0;
+    ssize_t read_line;
+    stack_t *stack = NULL;
+    unsigned int counter = 0;
 
     if (argc != 2)
     {
-        fprintf(stderr, "Usage: %s filename\n", argv[0]);
-        return (EXIT_FAILURE);
+        fprintf(stderr, "USAGE: monty file\n");
+        exit(EXIT_FAILURE);
     }
-
-    bytecode_file = fopen(argv[1], "r");
-    if (bytecode_file == NULL)
+    file = fopen(argv[1], "r");
+    bus.file = file;
+    if (!file)
     {
         fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-        return (EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
-
-    while (fgets(line, sizeof(line), bytecode_file) != NULL)
+    
+    while ((read_line = getline(&content, &size, file)) != -1)
     {
-         if (instruction_t == NULL)
+        bus.content = content;
+        counter++;
+        if (read_line > 0)
         {
-            fprintf(stderr, "Line %u: Invalid instruction\n", line_number);
+            execute(content, &stack, counter, file);
         }
-
-        line_number++;
     }
-
-    fclose(bytecode_file);
-
-    return (EXIT_SUCCESS);
+    
+    free(content);
+    free_stacks(stack);
+    fclose(file);
+    return (0);
 }
