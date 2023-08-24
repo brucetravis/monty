@@ -1,8 +1,8 @@
 #include "monty.h"
 /**
- * pall_s - prints the stack
+ * pall_s - This prints the stack
  * @head: the stack head
- * @counter: not used
+ * @counter: It is not used
  * Return: no return
 */
 void pall_s(stack_t **head, unsigned int counter)
